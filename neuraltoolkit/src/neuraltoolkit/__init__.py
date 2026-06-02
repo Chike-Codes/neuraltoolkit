@@ -1,13 +1,27 @@
-from .neuralnet import Model
+# Copyright (C) 2026  <Your Name or Organization>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://gnu.org>.
+
+from .model import Model
 from .dqn import Dqn
 from .graph import Graph
 
-from .layers import get_layer, Dense, Conv, Flatten, Concatenate
-from .losses import CategoricalCrossEntropy, MeanSquaredError
-from .optimizers import Sgd, Adagrad, RMSProp, Adam
-from .initializers import Glorot_initializer, He_initializer
-from .activations import Linear, Sigmoid, Tanh, Relu, Softmax
+from .core import *
+from .layers import *
+from .losses import *
+from .optimizers import *
+from .initializers import *
+from .activations import *
 
-
-from .ops import oneHot, argmax
-print("neuraltoolkit loaded!")
+print("Neural Tool Kit loaded!")

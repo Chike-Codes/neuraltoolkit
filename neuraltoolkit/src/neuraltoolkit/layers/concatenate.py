@@ -1,5 +1,4 @@
 import numpy as np
-from ..optimizers.optimizer import Optimizer
 from .layer import Layer
 
 class Concatenate(Layer):
@@ -23,7 +22,7 @@ class Concatenate(Layer):
         self.input_shape += self.concat_shape
         self.output_shape = self.input_shape
     
-    def initialize_optimizers(self, optimizer:Optimizer):
+    def initialize_optimizers(self, optimizer):
         self.weight_optimizer = None
         self.bias_optimizer = None
     

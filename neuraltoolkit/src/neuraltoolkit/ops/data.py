@@ -1,18 +1,24 @@
 import numpy as np
+from ..core import Tensor
 
-def shuffle_data(x, y, seed=None):
+def shuffle_data(x, seed=None):
     rng = np.random.default_rng(seed)
-    rng.shuffle(x)
-    rng = np.random.default_rng(seed)
-    rng.shuffle(y)
-    return x, y
+    rng.shuffle(x, axis=0)
+    return x
 
 
-def create_batches(arr:list, batch_size:int):
-    count = len(arr) // batch_size
+def create_batches(x:Tensor, batch_size:int) -> list:
+    count = x.shape[0] // batch_size
     if count == 0:
         count = 1
-    return np.array_split(arr, count)
+    batches = np.array_split(x.data, count)
+    tensors = []
+    for batch in batches:
+        tensors.append(Tensor(batch))
+
+    return tensors
+
+    
 
 def split_validation_data(validation_data, validation_split, validation_batch_size):
     if validation_split > 0:

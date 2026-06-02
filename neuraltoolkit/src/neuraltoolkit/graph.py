@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 class Graph:
-    def __init__(self, x_label="", y_label="", title=""):
+    def __init__(self, x_label, y_label, title):
         self.x_label = x_label
         self.y_label = y_label
         self.title = title
@@ -23,15 +23,6 @@ class Graph:
         self.ax.autoscale(enable=True, axis='both', tight=None) 
         plt.ion()
         plt.show()
-
-    def set_xlabel(self, label:str):
-        self.x_label = label
-
-    def set_ylabel(self, label:str):
-        self.y_label = label
-
-    def set_title(self, label:str):
-        self.title = label
 
     def close(self, event=None):
         plt.close(self.fig)
