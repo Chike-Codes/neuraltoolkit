@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "neuraltoolkit"
+name = "neural-tool-kit"
 version = "0.3.0"
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 (GPLv3)"]
 description = "A from-scratch neural network and tensor library built in Python for learning, experimentation, and deep understanding of modern ML systems."
