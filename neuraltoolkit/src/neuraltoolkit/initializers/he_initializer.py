@@ -2,10 +2,30 @@ import numpy as np
 from math import sqrt
 
 def he_init_norm(fan_in:int, shape:tuple, *args, **kwargs):
+    """
+    Initialize weights using He normal initialization.
+
+    Args:
+        fan_in: Number of input units.
+        shape: Shape of the weight tensor.
+
+    Returns:
+        Initialized weight tensor.
+    """
     std = sqrt(2 / fan_in)
     return np.random.randn(*shape) * std
 
 def he_init_uni(fan_in:int, shape:tuple, *args, **kwargs):
+    """
+    Initialize weights using He uniform initialization.
+
+    Args:
+        fan_in: Number of input units.
+        shape: Shape of the weight tensor.
+
+    Returns:
+        Initialized weight tensor.
+    """
     std = sqrt(6 / fan_in)
     return np.random.uniform(-std, std, size=shape)
 

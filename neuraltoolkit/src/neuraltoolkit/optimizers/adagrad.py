@@ -1,19 +1,33 @@
 import numpy as np
-from .optimizer import Optimizer
+from neuraltoolkit.optimizers.optimizer import Optimizer
 
-class Adagrad:
-    def __init__(self, learning_rate = 0.001):
+
+class Adagrad(Optimizer):
+    """
+    Adagrad optimizer.
+
+    Adapts learning rates based on the history of observed gradients.
+
+    Args:
+        parameters: Trainable model parameters.
+        learning_rate: Initial step size used for parameter updates.
+    """
+    def __init__(self, parameters, learning_rate = 0.001):
         self.learning_rate = learning_rate
         self.epsilon = 1e-8
         
+        self.parameters = parameters
 
-    def build(self, gradient_shape:tuple):
-            self.learning_gradient = np.zeros(gradient_shape)
-
-    def init(self):
-        self.learning_gradient *= 0
+        self.learning_gradients = []
+        for param in self.parameters:
+             self.learning_gradients.append(np.zeros(param.grad.shape))
 
     # updates weights and biases using Adagrad an adaptive optimizer that updates the LR for each parameter based on the sqrt of summed squares of previous gradients
-    def optimize(self, gradient):
-        self.learning_gradient += gradient ** 2
-        return (self.learning_rate / (np.sqrt(self.learning_gradient) + self.epsilon)) * gradient
+    def optimize(self):
+        for param, learning_gradient in zip(self.parameters, self.learning_gradients):
+            learning_gradient += param.grad ** 2
+            param.data -= (self.learning_rate / (np.sqrt(learning_gradient) + self.epsilon)) * param.grad
+
+    def clear_grad(self):
+        for param in self.parameters:
+            param.clear_grad()

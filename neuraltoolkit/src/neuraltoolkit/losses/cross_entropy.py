@@ -1,35 +1,35 @@
 import numpy as np
 from ..core.tensor import Tensor
 
-def cross_entropy_from_logits(logits:Tensor, labels:Tensor):
+class categorical_cross_entropy:
     """
-    Calculates the cross entropy loss from the raw output logits.
-    -------------------------------------------------------------
-    Softmax is included within this function so the output layer should be linear
-    
+    Categorical cross entropy loss for multi-class classification.
+
+    Expects raw logits as input and one-hot encoded labels.
     """
-    shifted_logits = logits.data - logits.data.max(axis=1, keepdims=True)
+    def __call__(self, logits:Tensor, labels:Tensor):
+        shifted_logits = logits.data - logits.data.max(axis=1, keepdims=True)
 
-    exp = np.exp(shifted_logits)
-    sum_exp = exp.sum(axis=1, keepdims=True)
-    
-    log_sum_exp = np.log(sum_exp)
-    log_softmax = shifted_logits - log_sum_exp
+        exp = np.exp(shifted_logits)
+        sum_exp = exp.sum(axis=1, keepdims=True)
+        
+        log_sum_exp = np.log(sum_exp)
+        log_softmax = shifted_logits - log_sum_exp
 
-    N = logits.data.shape[0]
-    loss_val = -np.sum(labels.data * log_softmax) / N
+        N = logits.data.shape[0]
+        loss_val = -np.sum(labels.data * log_softmax) / N
 
-    out = Tensor(loss_val, requires_grad=True)
+        out = Tensor(loss_val, requires_grad=True)
 
-    if logits.requires_grad:
-        def _cross_entropy_backward():
-            softmax = exp / sum_exp
-            logits.grad += out.grad * (softmax - labels.data) / N
+        if logits.requires_grad:
+            def _cross_entropy_backward():
+                softmax = exp / sum_exp
+                logits.grad += out.grad * (softmax - labels.data) / N
 
-        out._parents = {logits}
-        out._backward_fn = _cross_entropy_backward
+            out._parents = {logits}
+            out._backward_fn = _cross_entropy_backward
 
-    return out
+        return out
 
  
 def _cross_entropy_from_softmax(predictions:Tensor, labels:Tensor):

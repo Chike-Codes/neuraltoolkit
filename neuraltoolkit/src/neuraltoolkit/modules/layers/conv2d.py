@@ -1,12 +1,25 @@
 import numpy as np
-from ..core import conv2d
-from ..core.parameter import Parameter
-from ..initializers import ACTIVATION_TO_INIT
-from ..ops.image_processing import *
-from .layer import Layer
+from neuraltoolkit.modules.module import Module
+from ...core import conv2d
+from ...core.parameter import Parameter
+from ...initializers import ACTIVATION_TO_INIT
+from ...ops.image_processing import split_2d_param, get_im2col_indices
 from copy import deepcopy
 
-class Conv2d(Layer):
+class Conv2d(Module):
+    """
+    Standard convolutional layer
+
+    Applies a kernel to an image output a scaled down image of feature channels
+
+    Args:
+        in_channels (int): Number of channels in the input image
+        out_channels (int): Number of channels in the output image
+        kernel_size (int or tuple): Shape of kernel i.e. (h, w). If integer then defaults to (a, a)
+        stride (int or tuple): Number of pixels to skip in each direction i.e. (h, w). If integer then defaults to (a, a)
+        padding (int or tuple): number of zeros to apply to the input image vertically and horizontally i.e. (h, w). If integer then defaults to (a, a)
+        activation (object): Activation function applied to each layer output
+    """
     def __init__(
             self, 
             in_channels:int,
@@ -16,14 +29,6 @@ class Conv2d(Layer):
             padding:int|tuple,
             activation
             ):
-        #self.input_shape = input_shape
-        #self.filter_count = filters
-        #self.kernel_size = kernel_size
-        #self.stride = stride
-        #self.padding = padding
-        #self.output_shape = None
-        #self.initializer = initializer
-        #self.activation = activation
 
         self.in_channels = in_channels
         self.out_channels = out_channels
@@ -51,22 +56,17 @@ class Conv2d(Layer):
 
         self.weights = Parameter(weight_values)
         self.biases = Parameter(bias_values)
-    
-    def initialize_optimizers(self, optimizer):
-        self.weight_optimizer = deepcopy(optimizer)
-        self.bias_optimizer = deepcopy(optimizer)
-
-        self.weight_optimizer.build(self.weights.shape)
-        self.bias_optimizer.build(self.biases.shape)
-    
-    def optimize_parameters(self):
-        self.weights.data -= self.weight_optimizer.optimize(self.weights.grad)
-        self.biases.data -= self.bias_optimizer.optimize(self.biases.grad)
-
-        self.weights.clear_grad()
-        self.biases.clear_grad()
 
     def forward(self, x):
+        """
+        Performs a forward pass through the Conv layer
+        
+        Args:
+            x (Tensor): Input tensor of shape (batch_size, channels, height, width)
+
+        Returns:
+            Tensor of shape (batch_size, out_channels, out_heights, out_width)
+        """
         N, C, H, W = x.shape
         padded_shape = (N, C, H + self.pad_h, W + self.pad_w)
 
@@ -76,3 +76,6 @@ class Conv2d(Layer):
 
         z = conv2d(x, self.weights, self.stride, (self.pad_h, self.pad_w), self.flat_index_map) + self.biases
         return self.activation(z)
+    
+    def parameters(self):
+        return (self.weights, self.biases)

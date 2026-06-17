@@ -1,6 +1,5 @@
 import numpy as np
 from numpy.lib.stride_tricks import sliding_window_view
-from ..core.tensor import Tensor
 
 # image processing ----------------------------------------
 

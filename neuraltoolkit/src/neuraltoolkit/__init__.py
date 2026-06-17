@@ -13,15 +13,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://gnu.org>.
 
-from .model import Model
-from .dqn import Dqn
-from .graph import Graph
+from .modules import *
 
+from .data import *
 from .core import *
-from .layers import *
+from .modules.layers import *
 from .losses import *
 from .optimizers import *
 from .initializers import *
 from .activations import *
+from .training import Trainer
 
 print("Neural Tool Kit loaded!")

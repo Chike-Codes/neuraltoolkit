@@ -46,7 +46,7 @@ def conv2d(x, kernel, stride, pad, flat_index_map) -> Tensor:
     out = Tensor(out, requires_grad=True)
 
     def _conv2d_backward():
-        if x.requires_grad:
+        if x.requires_grad and Tensor.grad_enabled:
             grad_x = out.grad.copy() # (N, C_out, H_out, W_out)
             flat_grad_x = grad_x.reshape(N, C_out, out_height * out_width)
             flat_grad_x = flat_grad_x.transpose(0, 2, 1).copy()
@@ -59,7 +59,7 @@ def conv2d(x, kernel, stride, pad, flat_index_map) -> Tensor:
             else:
                 x.grad += dx
         
-        if kernel.requires_grad:
+        if kernel.requires_grad and Tensor.grad_enabled:
             grad = out.grad.copy() # (N, C_out, H_out, W_out)
             grad_reshaped = grad.reshape((N, C_out, out_height * out_width))
 
@@ -84,7 +84,7 @@ def reshape(x, shape):
     out._parents = {x}
 
     def _reshape_backward():
-        if x.requires_grad:
+        if x.requires_grad and Tensor.grad_enabled:
             grad_x = out.grad.copy()
             x.grad += np.reshape(grad_x, shape=x_shape)
     
@@ -143,7 +143,7 @@ def max_pool2d(
     out._parents = {x}
 
     def _max_pool2d_backward():
-        if x.requires_grad:
+        if x.requires_grad and Tensor.grad_enabled:
             max_indices = max_val_indices.squeeze(-1) # (N, HW_out, C)
 
             n_idx = np.arange(N)[:, None, None]

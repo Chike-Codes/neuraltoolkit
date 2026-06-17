@@ -1,9 +1,10 @@
-class Optimizer:
-    def build(self, gradient_shape:tuple):
-        raise NotImplementedError
-    
-    def init(self):
-        raise NotImplementedError
-    
-    def optimize(self, gradient):
-        raise NotImplementedError
+from abc import ABC, abstractmethod
+
+class Optimizer(ABC):
+    @abstractmethod
+    def optimize(self):
+        pass
+
+    def clear_grad(self):
+        for param in self.parameters:
+            param.clear_grad()

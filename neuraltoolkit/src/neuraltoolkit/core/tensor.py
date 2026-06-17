@@ -3,12 +3,21 @@ from .dtype import Dtype
 from .device import Device
 
 class Tensor:
+    """
+    Standard multidemsional datastorage
+
+    Args:
+        data: Tensor data
+        requires_grad (bool): Whether the tensor tracks gradients (defaults to False)
+        
+    """
     data: np.ndarray
     shape: tuple[int, ...]
     dtype: Dtype
-    device: Device.CPU
 
-    def __init__(self, data, device=Device.CPU, requires_grad=False):
+    grad_enabled=True
+
+    def __init__(self, data, requires_grad=False):
         self._parents = set()
         self._backward_fn = None
 
@@ -42,7 +51,7 @@ class Tensor:
         return data
     
     def clear_grad(self):
-        if self.requires_grad:
+        if self.requires_grad and Tensor.grad_enabled:
             self.grad *= 0
 
     def backward(self):
@@ -75,7 +84,7 @@ class Tensor:
     def T(self):
         out = Tensor(self.data.T, requires_grad=self.requires_grad)
 
-        if self.requires_grad:
+        if self.requires_grad and Tensor.grad_enabled:
             def _transpose_backward():
                 self.grad += out.grad.T
 
@@ -98,7 +107,7 @@ class Tensor:
         return grad
 
     def __repr__(self):
-        return f"Tensor:\n {self.data}"
+        return f"Tensor:\n {self.data} \n"
     
     def _Tensor_wrapper(self, other):
         return other if isinstance(other, Tensor) else Tensor(other)
@@ -109,7 +118,7 @@ class Tensor:
         out = Tensor(sliced_data, requires_grad=self.requires_grad)
 
         def _slice_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 self.grad[idx] += out.grad
 
             out._parents = {self}
@@ -124,7 +133,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _add_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = out.grad.copy()
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
             
@@ -142,7 +151,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _add_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = out.grad.copy()
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
             
@@ -160,7 +169,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _sub_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = out.grad.copy()
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
             
@@ -178,7 +187,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _sub_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = out.grad.copy()
                 self.grad -= self._reduce_broadcast(grad_self, self.shape)
             
@@ -196,7 +205,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _mul_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = out.grad * other.data
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
@@ -214,7 +223,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _mul_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = out.grad * other.data
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
@@ -232,7 +241,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _div_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = out.grad / other.data
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
@@ -250,7 +259,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _div_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = -out.grad * other.data / (self.data ** 2)
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
@@ -268,7 +277,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _pow_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = other.data * (self.data ** (other.data - 1)) * out.grad
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
@@ -286,7 +295,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _pow_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 grad_self = np.log(other.data) * (other.data ** self.data) * out.grad
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
@@ -304,7 +313,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _matmul_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 self.grad += out.grad @ other.data.T
 
             if other.requires_grad:
@@ -320,7 +329,7 @@ class Tensor:
         out._parents = {self, other}
 
         def _matmul_backward():
-            if self.requires_grad:
+            if self.requires_grad and Tensor.grad_enabled:
                 self.grad += other.data.T @ out.grad
 
             if other.requires_grad:
