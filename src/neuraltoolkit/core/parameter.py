@@ -7,6 +7,6 @@ class Parameter(Tensor):
     
     Parameters always have gradients
     """
-    def __init__(self, data, device=Device.CPU):
-        super().__init__(data, device, requires_grad=True)
+    def __init__(self, data):
+        super().__init__(data, requires_grad=True)
         self.name = "Parameter"

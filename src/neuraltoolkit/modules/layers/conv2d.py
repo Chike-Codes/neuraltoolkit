@@ -1,10 +1,10 @@
 import numpy as np
+from neuraltoolkit.initializers import get_initializer
+from neuraltoolkit.initializers.glorot_initializer import glorot_init_uni
 from neuraltoolkit.modules.module import Module
 from ...core import conv2d
 from ...core.parameter import Parameter
-from ...initializers import ACTIVATION_TO_INIT
 from ...ops.image_processing import split_2d_param, get_im2col_indices
-from copy import deepcopy
 
 class Conv2d(Module):
     """
@@ -18,8 +18,8 @@ class Conv2d(Module):
         kernel_size (int or tuple): Shape of kernel i.e. (h, w). If integer then defaults to (a, a)
         stride (int or tuple): Number of pixels to skip in each direction i.e. (h, w). If integer then defaults to (a, a)
         padding (int or tuple): number of zeros to apply to the input image vertically and horizontally i.e. (h, w). If integer then defaults to (a, a)
-        activation (object): Activation function applied to each layer output
     """
+
     def __init__(
             self, 
             in_channels:int,
@@ -27,20 +27,30 @@ class Conv2d(Module):
             kernel_size:int|tuple,
             stride:int|tuple,
             padding:int|tuple,
-            activation
+            initializer=glorot_init_uni()
             ):
+        super().__init__()
+        self._save_hparams(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            kernel_size=kernel_size,
+            stride=stride,
+            padding=padding,
+            initializer=initializer.__class__.__name__
+        )
 
         self.in_channels = in_channels
         self.out_channels = out_channels
+
+        self.weights = None
+        self.biases = None
         
         self.kernel_h, self.kernel_w = split_2d_param(kernel_size)
 
         self.stride = stride
         self.pad_h, self.pad_w = split_2d_param(padding)
 
-        self.activation = activation
-
-        self.initializer = ACTIVATION_TO_INIT[activation]
+        self.initializer = get_initializer(initializer)
         self.initialize_parameters()
 
         self.flat_index_map = None
@@ -75,7 +85,4 @@ class Conv2d(Module):
             self.prev_padded_shape = padded_shape
 
         z = conv2d(x, self.weights, self.stride, (self.pad_h, self.pad_w), self.flat_index_map) + self.biases
-        return self.activation(z)
-    
-    def parameters(self):
-        return (self.weights, self.biases)
+        return z

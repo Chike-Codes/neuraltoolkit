@@ -17,6 +17,12 @@ class Max_Pool2d(Module):
             stride:int|tuple,
             padding:int|tuple
             ):
+        super().__init__()
+        self._save_hparams(
+            kernel_size=kernel_size,
+            stride=stride,
+            padding=padding
+        )
         
         self.kernel_size = kernel_size
         self.kernel_h, self.kernel_w = split_2d_param(kernel_size)
@@ -50,3 +56,9 @@ class Max_Pool2d(Module):
     
     def parameters(self):
         return []
+    
+    def get_state(self):
+        pass
+
+    def load_state(self, state):
+        pass

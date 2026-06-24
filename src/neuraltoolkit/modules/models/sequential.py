@@ -1,23 +1,24 @@
-import numpy as np
-import neuraltoolkit as ntk
 from neuraltoolkit.core.tensor import Tensor
 from neuraltoolkit.modules.module import Module
 from neuraltoolkit.optimizers.optimizer import Optimizer
 from neuraltoolkit.training.history import History
 from neuraltoolkit.training.trainer import Trainer
-import pickle
-from matplotlib import pyplot as plt
-from copy import deepcopy
-from neuraltoolkit import CLI
-import gc
+from neuraltoolkit.modules import Registry
+
 
 class Sequential(Module):
     """Standard sequential neural network architure. 
     Includes fit() for simple training"""
-    def __init__(self):
+    def __init__(self, *args):
+        super().__init__()
         self.layers = []
         self.layer_count = 0
 
+        for layer in args:
+            if not isinstance(layer, Module):
+                raise ValueError("Sequential must be initialized with Modules only.")
+            self.add_layer(layer)
+            
         self.optimizer = None
         self.loss_func = None
 
@@ -53,7 +54,7 @@ class Sequential(Module):
         activations = []
         for i in range(self.layer_count):
             input = input_data if i == 0 else activations[i - 1]
-            layer_activations = self.layers[i].forward(input)
+            layer_activations = self.layers[i](input)
 
             activations.append(layer_activations)
         return activations[-1]
@@ -87,22 +88,35 @@ class Sequential(Module):
 
         return history
     
-    def save(self, filepath:str="/model_struct"):
-        model_data = {
-            "layers": [layer for layer in self.layers],
-            "loss": self.loss_func,
+    def get_config(self):
+        self._save_hparams(
+            layers=[layer.get_config() for layer in self.layers]
+        )
+        return self._config
+    
+    @classmethod
+    def from_config(cls, config):
+        layers = config["values"]["layers"]
+
+        args = []
+        for layer_config in layers:
+            module = Registry.get(layer_config["name"]).from_config(layer_config)
+            args.append(module)
+
+        return cls(*args)
+    
+    def get_state(self):
+        save_state = {
+            "layers": [layer.get_state() for layer in self.layers]
         }
 
-        with open(filepath, "wb") as f:
-            pickle.dump(model_data, f)
-        print("Model Saved")
+        return save_state
     
-    def load(self, filepath:str):
-        with open(filepath, "rb") as f:
-            model_data = pickle.load(f)
+    def load_state(self, state):
+        saved_layers = state["layers"]
 
-        for layer_data in model_data["layers"]:
-            layer = deepcopy(layer_data)
-            self.layers.append(layer)
-            self.layer_count += 1
-        self.loss_func = model_data["loss"]
+        for layer, params in zip(self.layers, saved_layers):
+            if params == None:
+                continue
+
+            layer.load_state(params)

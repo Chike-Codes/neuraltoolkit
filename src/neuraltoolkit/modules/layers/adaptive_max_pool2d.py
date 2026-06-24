@@ -1,7 +1,6 @@
 from neuraltoolkit.modules.module import Module
 from ...core import tensor_ops
 from ...ops.image_processing import calc_kernel_and_stride, get_im2col_indices
-import time
 
 class Adaptive_Max_Pool2d(Module):
     """
@@ -20,6 +19,11 @@ class Adaptive_Max_Pool2d(Module):
             H_out:int,
             W_out:int
             ):
+        super().__init__()
+        self._save_hparams(
+            H_out=H_out,
+            W_out=W_out
+        )
         
         self.H_out = H_out
         self.W_out = W_out
@@ -49,3 +53,10 @@ class Adaptive_Max_Pool2d(Module):
     
     def parameters(self):
         return []
+    
+    def get_state(self):
+        pass
+
+    def load_state(self, state):
+        pass
+    

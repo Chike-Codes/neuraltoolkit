@@ -87,5 +87,5 @@ class Dataloader:
     @property
     def num_batches(self):
         result = self.size // self.batch_size
-        result = result + 1 if result % 1 != 0 else result
+        result = 1 if result == 0 else result
         return result

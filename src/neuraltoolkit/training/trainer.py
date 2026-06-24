@@ -20,11 +20,11 @@ class Trainer:
         loss: Loss function used during training.
     """
     def __init__(self,
-                  model:Module,
+                  module:Module,
                   optimizer:Optimizer,
                   loss
     ):
-        self.model = model
+        self.module = module
         self.optimizer = optimizer
         self.loss = loss
 
@@ -37,7 +37,8 @@ class Trainer:
             shuffle,
             drop_remainder_batch,
             validation_split,
-            validation_data
+            validation_data,
+            verbose
     ) -> TrainingConfig:
         config = TrainingConfig()
 
@@ -47,9 +48,11 @@ class Trainer:
         if isinstance(data, Dataloader):
             train_loader = data
         else:
+            # Define defualt loader parameters
             batch_size = 32 if batch_size == None else batch_size
             shuffle = False if shuffle == None else shuffle
             drop_remainder_batch = False if drop_remainder_batch == None else drop_remainder_batch
+        
 
             if isinstance(data, Dataset):
                 train_loader = Dataloader(data, batch_size, shuffle, drop_remainder_batch)
@@ -90,7 +93,7 @@ class Trainer:
             val_loader = validation_data
         elif isinstance(validation_data, Dataset):
             # Does not need to be shuffled
-            val_laoder = Dataloader(validation_data, batch_size, False, drop_remainder_batch)
+            val_loader = Dataloader(validation_data, batch_size, False, drop_remainder_batch)
         elif isinstance(validation_data, tuple) and all(isinstance(item, Tensor) for item in validation_data):
             val_x = validation_data[0]
             val_y = validation_data[1]
@@ -100,9 +103,11 @@ class Trainer:
             # Does not need to be shuffled
             val_loader = Dataloader(val_dataset, batch_size, False, drop_remainder_batch)
         
+        # define TrainingConfig values
         config.train_loader = train_loader
         config.val_loader = val_loader
         config.epochs = epochs
+        config.verbose = True if verbose == None else verbose
         
         return config
 
@@ -116,7 +121,8 @@ class Trainer:
             shuffle:bool=None,
             drop_remainder_batch:bool=None,
             validation_split=None,
-            validation_data=None
+            validation_data=None,
+            verbose=None
 
     ) -> History:
         """
@@ -147,7 +153,8 @@ class Trainer:
             shuffle,
             drop_remainder_batch,
             validation_split,
-            validation_data
+            validation_data,
+            verbose
         )
 
         history = self._train(config)
@@ -165,7 +172,9 @@ class Trainer:
             history.epoch_step()
             history.log(metrics)
 
-            CLI.epoch_summary(config, metrics, history.epochs)
+            # Terminal output
+            if config.verbose:
+                CLI.epoch_summary(config, metrics, history.epochs)
 
         return history
     
@@ -181,12 +190,13 @@ class Trainer:
             epoch_loss += batch_loss
 
             # update progress bar
-            batch_count = config.train_loader.num_batches
-            front_str = f"Epoch: {epoch_index + 1} / {config.epochs}"
-            end_str = f"Batch {batch_index} / {batch_count} Loss: {batch_loss:.5f}"
-            CLI.progress_bar((batch_index / batch_count), 40, front_str, end_str)
+            if config.verbose:
+                batch_count = config.train_loader.num_batches
+                front_str = f"Epoch: {epoch_index + 1} / {config.epochs}"
+                end_str = f"Batch {batch_index} / {batch_count} Loss: {batch_loss:.5f}"
+                CLI.progress_bar((batch_index / batch_count), 40, front_str, end_str)
 
-        mean_loss = epoch_loss / config.train_loader.size
+        mean_loss = epoch_loss / config.train_loader.num_batches
         return mean_loss
     
     def _validate_epoch(self, config, epoch_index):
@@ -201,22 +211,23 @@ class Trainer:
             epoch_loss += batch_loss
 
             # update progress bar
-            batch_count = config.val_loader.num_batches
-            front_str = f"Epoch: {epoch_index + 1} / {config.epochs}"
-            end_str = f"Batch {batch_index} / {batch_count} Validation Loss: {batch_loss:.5f}"
-            CLI.progress_bar((batch_index / batch_count), 40, front_str, end_str)
+            if config.verbose:
+                batch_count = config.val_loader.num_batches
+                front_str = f"Epoch: {epoch_index + 1} / {config.epochs}"
+                end_str = f"Batch {batch_index} / {batch_count} Validation Loss: {batch_loss:.5f}"
+                CLI.progress_bar((batch_index / batch_count), 40, front_str, end_str)
 
-        mean_loss = epoch_loss / config.train_loader.size
+        mean_loss = epoch_loss / config.val_loader.num_batches
         return mean_loss
     
     def _validate_batch(self, batch_x, batch_y):
         with ntk.no_grad():
-            output = self.model(batch_x)
+            output = self.module(batch_x)
             loss = self.loss(output, batch_y)
             return loss.data[0]
     
     def _fit_batch(self, batch_x, batch_y) -> int:
-        output = self.model(batch_x)
+        output = self.module(batch_x)
         loss = self.loss(output, batch_y)
         self.backprop(loss)
         gc.collect()

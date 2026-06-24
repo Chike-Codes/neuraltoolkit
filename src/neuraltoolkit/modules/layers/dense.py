@@ -1,9 +1,10 @@
-import numpy as np
+from mimetypes import init
 
+import numpy as np
+from neuraltoolkit.initializers import get_initializer
+from neuraltoolkit.initializers.glorot_initializer import glorot_init_uni
 from neuraltoolkit.modules.module import Module
 from ...core.parameter import Parameter
-from ...initializers import ACTIVATION_TO_INIT
-from copy import deepcopy
 
 class Dense(Module):
     """
@@ -16,18 +17,23 @@ class Dense(Module):
     Args:
         input_shape (int): Number of layer inputs
         output_shape (int): Number of layer outputs
-        activation (object): Activation function applied to each layer output
     """
 
+    def __init__(self, input_shape:int, output_shape:int, initializer=glorot_init_uni()):
+        super().__init__()
+        self._save_hparams(
+            input_shape=input_shape,
+            output_shape=output_shape,
+            initializer=initializer.__class__.__name__
+        )
 
-    def __init__(self, input_shape:int, output_shape:int, activation):
         self.input_shape = input_shape
         self.output_shape = output_shape
+        
+        self.weights = None
+        self.biases = None
 
-        self.initializer = ACTIVATION_TO_INIT[activation]
-
-        self.activation = activation
-
+        self.initializer = get_initializer(initializer)
         self._initialize_parameters()
 
     def _initialize_parameters(self):
@@ -36,9 +42,6 @@ class Dense(Module):
 
         self.weights = Parameter(weight_values)
         self.biases = Parameter(bias_values)
-
-        self.weight_optimizer.build(self.weights.shape)
-        self.bias_optimizer.build(self.biases.shape)
     
     def forward(self, x):
         """
@@ -51,7 +54,6 @@ class Dense(Module):
             Tensor of shape (batch_size, output_size)
         """
         z = x @ self.weights.T + self.biases
-        return self.activation(z)
+        return z
+
     
-    def parameters(self):
-        return (self.weights, self.biases)

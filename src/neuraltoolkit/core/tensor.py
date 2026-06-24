@@ -7,7 +7,7 @@ class Tensor:
     Standard multidemsional datastorage
 
     Args:
-        data: Tensor data
+        data (numpy array or list): Tensor data (lists are converted to numpy arrays)
         requires_grad (bool): Whether the tensor tracks gradients (defaults to False)
         
     """
@@ -29,7 +29,6 @@ class Tensor:
             self.data = self.data.astype(np.float32)
         self.dtype = self.data.dtype
         
-        self.device = device
         self.requires_grad = requires_grad
 
         self.grad = np.zeros(shape=self.shape, dtype=np.float32) if requires_grad else None

@@ -6,6 +6,7 @@ class Flatten(Module):
     Flattens an image input into a 1D vector
     """
     def __init__(self):
+        super().__init__()
         pass
 
     def forward(self, x):
@@ -24,3 +25,13 @@ class Flatten(Module):
     
     def parameters(self):
         return []
+    
+    def get_state(self):
+        pass
+
+    def load_state(self, state):
+        pass
+
+    @classmethod
+    def from_config(cls, config):
+        return cls()
