@@ -7,4 +7,6 @@ build/
 *.egg-info/
 README.md
 Examples
-
+*.npz
+*.ntk
+tests/

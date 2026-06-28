@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "neural-tool-kit"
-version = "0.3.4"
+name = "ntk-ml"
+version = "1.0.1"
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 (GPLv3)"]
 description = "A from-scratch neural network and tensor library built in Python for learning, experimentation, and deep understanding of modern ML systems."
 readme = "README.md"
@@ -13,13 +13,14 @@ requires-python = ">=3.10"
 dependencies = [
     "numpy>=2.3.1",
     "matplotlib>=3.10.3",
+    "requests>=2.34.2",
 ]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-neuraltoolkit = ["archive/**/*"]
+neuraltoolkit = ["*.idx3-ubyte", "*.idx1-ubyte"]
 
 [tool.setuptools]
 include-package-data = true

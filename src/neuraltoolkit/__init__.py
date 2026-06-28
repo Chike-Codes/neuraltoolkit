@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://gnu.org>.
 
-__version__ = "0.3.4"
+__version__ = "1.0.1"
 
 from .modules import *
 
@@ -25,5 +25,6 @@ from .optimizers import *
 from .initializers import *
 from .training import Trainer
 from . import datasets
+
 
 print("Neural Tool Kit loaded!")

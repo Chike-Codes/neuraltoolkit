@@ -69,7 +69,7 @@ class Module(ABC):
     
     def save(self, path:str):
         save_dict = {
-            "ntk_version":version("neuraltoolkit"),
+            "ntk_version":version("ntk-ml"),
             "module_type":self.__class__.__name__,
             "config":self.get_config(),
             "state":self.get_state()
@@ -80,7 +80,7 @@ class Module(ABC):
 
     def get_save_dict(self):
         save_dict = {
-            "ntk_version":version("neuraltoolkit"),
+            "ntk_version":version("ntk-ml"),
             "module_type":self.__class__.__name__,
             "config":self.get_config(),
             "state":self.get_state()
@@ -98,9 +98,9 @@ class Module(ABC):
             raise TypeError(("Attempting to load module data into the wrong module" 
                             f"Cannot load {data["module_type"]} into {cls.__name__}"))
         
-        if data["ntk_version"] != version("neuraltoolkit"):
+        if data["ntk_version"] != version("ntk-ml"):
             warnings.warn((f"Model was saved with NTK {data["ntk_Version"]}"
-                          f"but the current version is {version("neuraltoolkit")}"))
+                          f"but the current version is {version("ntk-ml")}"))
 
         module = cls.from_config(data["config"])
         module.load_state(data["state"])

@@ -1,9 +1,18 @@
 from neuraltoolkit.core.tensor import Tensor
 from neuraltoolkit.data.dataset import Dataset
+from neuraltoolkit.datasets.management.data_resource import DatasetResource
+from neuraltoolkit.datasets.management.retrieve import retrieve_path
 from neuraltoolkit.datasets.mnist import mnistloader
 from pathlib import Path
 import numpy as np
 
+
+MNIST_RESOURCE = DatasetResource(
+    name="mnist",
+    url="https://github.com/Chike-Codes/neuraltoolkit/releases/download/datasets-v1/mnist.npz",
+    sha256="4dc5a9aaba44b3fde1d478c7c21f18bcfc67e34f139fe072b43d7ad5848365b2",
+    file_name="mnist.npz"
+)
 
 def mnist():
     """
@@ -38,20 +47,14 @@ def MNIST(train:bool):
             x: (10000, 1, 28, 28)
             y: (10000, 10)
     """
-    path = Path(__file__).parent / "archive"
-    
-    if train:
-        labels_path = path / "train-labels.idx1-ubyte"
-        images_path = path / "train-images.idx3-ubyte"
-    else:
-        labels_path = path / "t10k-labels.idx1-ubyte"
-        images_path = path / "t10k-images.idx3-ubyte"
-
-    images, labels = mnistloader.load_images_labels(images_path, labels_path)
-
-    data = np.array(images, dtype=np.float32).reshape(len(images), 1, 28, 28)
-    data = data / 255
-    labels = np.eye(10)[labels]
+    path = retrieve_path(MNIST_RESOURCE)
+    with np.load(path) as cache:
+        if train:
+            data = cache["train_x"]
+            labels = cache["train_y"]
+        else:
+            data = cache["val_x"]
+            labels = cache["val_y"]
 
     data = Tensor(data)
     labels = Tensor(labels)

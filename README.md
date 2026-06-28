@@ -1,6 +1,6 @@
 <img width="950" height="450" alt="NTK Banner" src="https://github.com/user-attachments/assets/cfe9a4ae-fe8e-417b-8018-1bd468977af8" />
 
-# Neural Tool Kit
+# Neural Tool Kit (NTK)
 Neural Tool Kit (NTK) is a machine learning framework built from
 scratch in Python on top of NumPy. The project aims to provide a
 hands-on exploration of the core systems behind modern deep learning
@@ -14,7 +14,7 @@ be useful to students, hobbyists, and anyone interested in
 understanding how machine learning frameworks work internally.
 
 ## Motivation
-I built Neural Tool Kit to develop a deeper understanding of the systems that power modern deep learning frameworks. By implementing these components from scratch, I can explore how they work internally rather than treating them as black boxes.
+I built NTK to develop a deeper understanding of the systems that power modern deep learning frameworks. By implementing these components from scratch, I can explore how they work internally rather than treating them as black boxes.
 
 ## Features
 - Tensor abstraction with automatic differentiation
@@ -43,7 +43,12 @@ The following features are planned but not yet available:
 
 ## Installation
 ```powershell
-python -m pip install neural-tool-kit
+python -m pip install ntk-ml
+```
+
+## Import
+```python
+import neuraltoolkit as ntk
 ```
 
 ## Quickstart
@@ -183,8 +188,6 @@ labels_argmax = np.argmax(val_dataset.y.data, axis=-1)
 
 percentage = np.mean(predictions_argmax == labels_argmax) * 100
 print(f"Test Accuracy: {percentage}%")
-
-#history.plot("loss", "val_loss")
 
 model.save(".model_conv")
 print("Model Saved!")
