@@ -4,7 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ntk-ml"
-version = "1.0.1"
+version = "1.0.4"
+dynamic = ["version"]
+readme = "README.md"
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 (GPLv3)"]
 description = "A from-scratch neural network and tensor library built in Python for learning, experimentation, and deep understanding of modern ML systems."
 readme = "README.md"
@@ -16,11 +18,13 @@ dependencies = [
     "requests>=2.34.2",
 ]
 
+[project.urls]
+Homepage = "https://github.com/Chike-Codes/neuraltoolkit"
+Repository = "https://github.com/Chike-Codes/neuraltoolkit"
+Issues = "https://github.com/Chike-Codes/neuraltoolkit/issues"
+
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.setuptools.package-data]
-neuraltoolkit = ["*.idx3-ubyte", "*.idx1-ubyte"]
 
 [tool.setuptools]
 include-package-data = true

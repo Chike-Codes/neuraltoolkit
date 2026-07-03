@@ -1,4 +1,6 @@
-<img width="950" height="450" alt="NTK Banner" src="https://github.com/user-attachments/assets/cfe9a4ae-fe8e-417b-8018-1bd468977af8" />
+[![PyPI version](https://img.shields.io/pypi/v/ntk-ml?maxAge=0)](https://pypi.org/project/ntk-ml/)
+
+<img width="950" height="450" alt="NTK Banner" src="NTK Banner.png" />
 
 # Neural Tool Kit (NTK)
 Neural Tool Kit (NTK) is a machine learning framework built from
