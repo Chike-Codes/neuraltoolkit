@@ -2,7 +2,6 @@ from neuraltoolkit.core.tensor import Tensor
 from neuraltoolkit.data.dataset import Dataset
 from neuraltoolkit.datasets.management.data_resource import DatasetResource
 from neuraltoolkit.datasets.management.retrieve import retrieve_path
-from neuraltoolkit.datasets.mnist import mnistloader
 from pathlib import Path
 import numpy as np
 
