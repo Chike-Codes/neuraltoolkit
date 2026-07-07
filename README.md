@@ -133,7 +133,8 @@ xx, yy = np.meshgrid(
 )
 
 grid_points = np.c_[xx.ravel(), yy.ravel()]
-predictions = model(ntk.Tensor(grid_points))
+with ntk.no_grad():
+    predictions = model(ntk.Tensor(grid_points))
 
 Z = predictions.data.reshape(xx.shape)
 print(Z)
@@ -191,6 +192,6 @@ labels_argmax = np.argmax(val_dataset.y.data, axis=-1)
 percentage = np.mean(predictions_argmax == labels_argmax) * 100
 print(f"Test Accuracy: {percentage}%")
 
-model.save(".model_conv")
+model.save(".model_conv.ntk")
 print("Model Saved!")
 ```
