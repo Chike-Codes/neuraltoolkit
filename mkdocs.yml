@@ -1,0 +1,82 @@
+site_name: Neural Tool Kit
+site_description: A NumPy-based deep learning library designed for learning and experimentation.
+site_url: https://Chike-Codes.github.io/neuraltoolkit
+
+repo_name: Chike-Codes/neuraltoolkit
+repo_url: https://github.com/Chike-Codes/neuraltoolkit
+
+extra_css:
+  - stylesheets/extra.css
+
+theme:
+  name: material
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: cyan
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: amber
+
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.expand
+    - navigation.tabs.sticky
+    - content.code.copy
+    - search.highlight
+    - search.suggest
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: false
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Examples:
+      - XOR: examples/xor.md
+      - MNIST: examples/mnist.md
+      - Serialization: examples/serialization.md
+  - API:
+      - Modules:
+          - Dense: api/layers/dense.md
+          - Conv2D: api/layers/conv2d.md
+          - Flatten: api/layers/flatten.md
+          - Max Pool 2D: api/layers/max_pool2d.md
+          - Adaptive Max Pool 2D: api/layers/adaptive_max_pool2d.md
+          - Sequential: api/sequential.md
+          - Sigmoid: api/activations/sigmoid.md
+          - Tanh: api/activations/tanh.md
+          - ReLU: api/activations/relu.md
+          - Leaky ReLU: api/activations/leaky_relu.md
+          - Softmax: api/activations/softmax.md
+      - Datasets: api/datasets.md
+      - Optimizers: api/optimizers.md
+      - Losses: api/losses.md
+      - Tensor: api/tensor.md
+      - Trainer: api/trainer.md
+      - Serialization: api/serialization.md

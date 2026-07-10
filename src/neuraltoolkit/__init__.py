@@ -25,6 +25,3 @@ from .optimizers import *
 from .initializers import *
 from .training import Trainer
 from . import datasets
-
-
-print("Neural Tool Kit loaded!")

@@ -8,27 +8,44 @@ from ...core.parameter import Parameter
 
 class Dense(Module):
     """
-    Standard fully connected layer
+    A fully connected layer.
 
-    Applies the affine transformation:
+    Applies the affine transformation
 
-    y = xW + b
+        y = xW + b
+
+    to the input tensor.
 
     Args:
-        input_shape (int): Number of layer inputs
-        output_shape (int): Number of layer outputs
+        in_shape:
+            Number of input features.
+
+        out_shape:
+            Number of output features.
+
+    ## Shapes
+        Input:
+            (N, in_features)
+
+        Output:
+            (N, out_features)
+
+    Example:
+        layer = ntk.Dense(784, 128)
+        
+        y = layer(x)
     """
 
-    def __init__(self, input_shape:int, output_shape:int, initializer=glorot_init_uni()):
+    def __init__(self, in_shape:int, out_shape:int, initializer=glorot_init_uni()):
         super().__init__()
         self._save_hparams(
-            input_shape=input_shape,
-            output_shape=output_shape,
+            input_shape=in_shape,
+            output_shape=out_shape,
             initializer=initializer.__class__.__name__
         )
 
-        self.input_shape = input_shape
-        self.output_shape = output_shape
+        self.in_shape = in_shape
+        self.out_shape = out_shape
         
         self.weights = None
         self.biases = None
@@ -37,8 +54,8 @@ class Dense(Module):
         self._initialize_parameters()
 
     def _initialize_parameters(self):
-        weight_values = self.initializer(fan_in=self.input_shape, fan_out=self.output_shape, shape=(self.output_shape, self.input_shape))
-        bias_values = np.zeros((1, self.output_shape))
+        weight_values = self.initializer(fan_in=self.in_shape, fan_out=self.out_shape, shape=(self.out_shape, self.in_shape))
+        bias_values = np.zeros((1, self.out_shape))
 
         self.weights = Parameter(weight_values)
         self.biases = Parameter(bias_values)

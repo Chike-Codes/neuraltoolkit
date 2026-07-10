@@ -3,7 +3,7 @@ from neuraltoolkit.modules.activations.activation import Activation
 import numpy as np
 
 
-class Leaky_relu(Activation):
+class Leaky_Relu(Activation):
     def __init__(self, alpha=0.1):
         self.alpha = alpha
 
