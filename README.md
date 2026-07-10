@@ -1,6 +1,6 @@
 [![PyPI version](https://img.shields.io/pypi/v/ntk-ml?maxAge=0)](https://pypi.org/project/ntk-ml/)
 
-<img width="950" height="450" alt="NTK Banner" src="NTK Banner.png" />
+![NTK Banner](https://raw.githubusercontent.com/Chike-Codes/neuraltoolkit/refs/heads/main/NTK%20Banner.png)
 
 # Neural Tool Kit (NTK)
 Neural Tool Kit (NTK) is a machine learning framework built from
@@ -102,9 +102,9 @@ y = ntk.Tensor([
 ])
 
 model = ntk.Sequential(
-    ntk.Dense(input_shape=2, output_shape=4),
+    ntk.Dense(in_shape=2, out_shape=4),
     ntk.Tanh(),
-    ntk.Dense(input_shape=4, output_shape=1),
+    ntk.Dense(in_shape=4, out_shape=1),
     ntk.Sigmoid()
 )
 
@@ -155,16 +155,16 @@ import numpy as np
 import neuraltoolkit as ntk
 
 model = ntk.Sequential(
-    ntk.Conv2d(1, 32, 3, 1, 0),
+    ntk.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=0),
     ntk.Relu(),
-    ntk.Adaptive_Max_Pool2d(13, 13),
-    ntk.Conv2d(32, 64, 3, 1, 0),
+    ntk.Adaptive_Max_Pool2d(H_out=13, W_out=13),
+    ntk.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=0),
     ntk.Relu(),
-    ntk.Adaptive_Max_Pool2d(5, 5),
+    ntk.Adaptive_Max_Pool2d(H_out=5, W_out=5),
     ntk.Flatten(),
-    ntk.Dense(1600, 128),
+    ntk.Dense(in_shape=1600, out_shape=128),
     ntk.Relu(),
-    ntk.Dense(128, 10)
+    ntk.Dense(in_shape=128, out_shape=10)
 )
 
 train_dataset, val_dataset = ntk.datasets.mnist()
