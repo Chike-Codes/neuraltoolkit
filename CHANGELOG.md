@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on *Keep a Changelog*, and this project adheres to *Semantic Versioning*.
 
+## [1.0.6] - 2026-07-14
+
+### Added
+* Stand-alone softmax function
+
 ## [1.0.5] - 2026-07-7
 * Resolved minor package initialization bug
 

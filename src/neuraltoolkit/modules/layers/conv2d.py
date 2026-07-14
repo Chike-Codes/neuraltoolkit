@@ -13,11 +13,33 @@ class Conv2d(Module):
     Applies a kernel to an image output a scaled down image of feature channels
 
     Args:
-        in_channels (int): Number of channels in the input image
-        out_channels (int): Number of channels in the output image
-        kernel_size (int or tuple): Shape of kernel i.e. (h, w). If integer then defaults to (a, a)
-        stride (int or tuple): Number of pixels to skip in each direction i.e. (h, w). If integer then defaults to (a, a)
-        padding (int or tuple): number of zeros to apply to the input image vertically and horizontally i.e. (h, w). If integer then defaults to (a, a)
+        in_channels (int): 
+            Number of channels in the input image
+
+        out_channels (int): 
+            Number of channels in the output image
+
+        kernel_size (int or tuple): 
+            Shape of kernel (h, w). If integer then defaults to (a, a)
+
+        stride (int or tuple): 
+            Number of pixels to skip in each direction (h, w). If integer then defaults to (a, a)
+
+        padding (int or tuple): 
+            number of zeros to apply to the input image vertically and horizontally (h, w). If integer then defaults to (a, a)
+
+    ## Shapes
+        Input:
+            (N, in_channels, in_height, in_width)
+
+        Output:
+            (N, out_channels, out_height, out_width)
+
+    Example:
+        layer = ntk.Conv2d(3, 32, 2, 1, 0)
+
+        y = layer(x)
+
     """
 
     def __init__(
@@ -68,15 +90,6 @@ class Conv2d(Module):
         self.biases = Parameter(bias_values)
 
     def forward(self, x):
-        """
-        Performs a forward pass through the Conv layer
-        
-        Args:
-            x (Tensor): Input tensor of shape (batch_size, channels, height, width)
-
-        Returns:
-            Tensor of shape (batch_size, out_channels, out_heights, out_width)
-        """
         N, C, H, W = x.shape
         padded_shape = (N, C, H + self.pad_h, W + self.pad_w)
 

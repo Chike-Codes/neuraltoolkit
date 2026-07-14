@@ -39,8 +39,8 @@ class Dense(Module):
     def __init__(self, in_shape:int, out_shape:int, initializer=glorot_init_uni()):
         super().__init__()
         self._save_hparams(
-            input_shape=in_shape,
-            output_shape=out_shape,
+            in_shape=in_shape,
+            out_shape=out_shape,
             initializer=initializer.__class__.__name__
         )
 
@@ -61,15 +61,6 @@ class Dense(Module):
         self.biases = Parameter(bias_values)
     
     def forward(self, x):
-        """
-        Performs a forward pass through the Dense layer
-        
-        Args:
-            x (Tensor): Input tensor of shape (batch_size, input_size)
-
-        Returns:
-            Tensor of shape (batch_size, output_size)
-        """
         z = x @ self.weights.T + self.biases
         return z
 

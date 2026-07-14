@@ -8,11 +8,18 @@ class Dataloader:
     providing an efficient interface for training models.
 
     Args:
-        dataset (Dataset): Dataset to iterate over.
-        batch_size (int): Number of samples per batch.
-        shuffle (bool): Whether to shuffle the dataset at the
+        dataset (Dataset): 
+            Dataset to iterate over.
+
+        batch_size (int): 
+            Number of samples per batch.
+            
+        shuffle (bool): 
+            Whether to shuffle the dataset at the
             beginning of each epoch. (defaults to False)
-        drop_remainder (bool): determins if the final mini batch should be dropped
+            
+        drop_remainder (bool):
+            determins if the final mini batch should be dropped
             if the data cannot be segmented evenly. (defaults to False)
         
     """
@@ -73,7 +80,19 @@ class Dataloader:
         self.batch_size = batch_size
 
     def split(self, frac:float, shuffle:bool=False):
-        """Returns a training and validation Dataloader"""
+        """
+            Splits the data into training and validation `Dataloaders`
+            
+            Args:
+                frac (float): 
+                    The percent of data that will be for training
+
+                shuffle (bool): 
+                    Whether the data will be shuffled before split. Defaults to `False`
+
+            Example:
+                training, validation = dataloader.split(frac=0.8, shuffle=False)
+        """
         train_subset, val_subset = self.dataset.split(frac, shuffle)
         train_loader = Dataloader(train_subset, self.batch_size, self._shuffle_flag, self.drop_remainder)
         val_loader = Dataloader(val_subset, self.batch_size, shuffle=False, drop_remainder=self.drop_remainder)

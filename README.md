@@ -62,9 +62,9 @@ x = ntk.Tensor(training_data)
 y = ntk.Tensor(training_labels)
 
 model = ntk.Sequential(
-  ntk.Dense(input_shape=4, output_shape=32),
+  ntk.Dense(in_shape=4, out_shape=32),
   ntk.Relu(),
-  ntk.Dense(input_shape=32, output_shape=10),
+  ntk.Dense(in_shape=32, out_shape=10),
   ntk.Tanh()
 )
 

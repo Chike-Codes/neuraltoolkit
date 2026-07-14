@@ -7,9 +7,21 @@ class Max_Pool2d(Module):
     Scales down an image by selecting the maximum pixel values
 
     Args:
-        kernel_size (int or tuple): Shape of kernel i.e. (h, w). If integer then defaults to (a, a)
-        stride (int or tuple): Number of pixels to skip in each direction i.e. (h, w). If integer then defaults to (a, a)
-        padding (int or tuple): number of zeros to apply to the input image vertically and horizontally i.e. (h, w). If integer then defaults to (a, a)
+        kernel_size (int or tuple): 
+            Shape of kernel (h, w). If integer then defaults to (a, a)
+
+        stride (int or tuple): 
+            Number of pixels to skip in each direction (h, w). If integer then defaults to (a, a)
+
+        padding (int or tuple): 
+            number of zeros to apply to the input image vertically and horizontally (h, w). If integer then defaults to (a, a)
+
+    ## Shapes
+        Input:
+            (N, channels, in_height, in_width)
+
+        Output
+            (N, channels, out_height, out_width)
     """
     def __init__(
             self, 
@@ -34,16 +46,6 @@ class Max_Pool2d(Module):
         self.prev_padded_shape = None
 
     def forward(self, x):
-        """
-        Performs a forward pass through the Max Pool layer
-        
-        Args:
-            x (Tensor): Input tensor of shape (batch_size, channels, height, width)
-
-        Returns:
-            Tensor of shape (batch_size, out_channels, out_height, out_width)
-            output image shape is calculated automatically
-        """
         N, C, H, W = x.shape
         padded_shape = (N, C, H + self.pad_h, W + self.pad_w)
 

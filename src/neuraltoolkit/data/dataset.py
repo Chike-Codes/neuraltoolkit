@@ -24,7 +24,19 @@ class Dataset:
         self.y = y
 
     def split(self, frac, shuffle:bool=True) -> Subset:
-        """Returns a training a validation subset"""
+        """
+        Splits the data into training and validation `Subsets`
+        
+        Args:
+            frac (float): 
+                The percent of data that will be for training
+
+            shuffle (bool): 
+                Whether the data will be shuffled before split. Defaults to `True`
+
+        Example:
+            training, validation = dataset.split(frac=0.8, shuffle=True)
+        """
         indices = np.random.permutation(self.size, )
 
         split = int(len(indices) * frac)
