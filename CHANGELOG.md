@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on *Keep a Changelog*, and this project adheres to *Semantic Versioning*.
 
+## [1.0.8] - 2026-07-14
+
+### Fixed
+* Resolved minor bug
+
 ## [1.0.6] - 2026-07-14
 
 ### Added

@@ -2,7 +2,7 @@ from neuraltoolkit.core.tensor import Tensor
 import numpy as np
 
 
-def softmax(self, x:Tensor):
+def softmax(x:Tensor):
     expos = np.exp(x.data - np.max(x.data, axis=1, keepdims=True)) # normalized
     expo_sum = np.sum(expos, axis=1, keepdims=True)
     softmax = expos / expo_sum
