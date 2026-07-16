@@ -4,11 +4,17 @@ from .device import Device
 
 class Tensor:
     """
-    Standard multidemsional datastorage
+    `Tensor` is NTK's base data object for multi-dimensional array storage, data operations, and 
+    automatic gradient calculation and differiation.
+
+    All functions and objects in NTK expect and return Tensor data
 
     Args:
-        data (numpy array or list): Tensor data (lists are converted to numpy arrays)
-        requires_grad (bool): Whether the tensor tracks gradients (defaults to False)
+        data (numpy array or list):
+            Tensor data (lists are converted to numpy arrays)
+
+        requires_grad (bool): 
+            Whether the tensor tracks gradients (defaults to False)
         
     """
     data: np.ndarray
@@ -124,6 +130,10 @@ class Tensor:
             out._backward_fn = _slice_backward
 
         return out
+    
+    def __iter__(self):
+        for i in range(self.shape[0]):
+            yield self[i]
     
     def __add__(self, other):
         other = self._Tensor_wrapper(other)
@@ -335,6 +345,18 @@ class Tensor:
                 other.grad += out.grad @ self.data.T
 
         out._backward_fn = _matmul_backward
+        return out
+    
+    def __neg__(self):
+        out = Tensor(self.data * -1, requires_grad=True)
+
+        out._parents = {self}
+
+        def _neg_backward():
+            if self.requires_grad and Tensor.grad_enabled:
+                self.grad += -1 * out.grad
+
+        out._backward_fn = _neg_backward
         return out
 
     def __floordiv__(self, other):

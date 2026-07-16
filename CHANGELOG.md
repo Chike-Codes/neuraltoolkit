@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on *Keep a Changelog*, and this project adheres to *Semantic Versioning*.
 
+## [1.0.9] - 2026-07-16
+
+### Added
+* Tensors are now iterable
+* Negation operator for tensors
+* Tensor helper function - check_dims
+* Tensor helper function - check_shape
+
+### Updated
+* Refined multiple docstrings
+
+### Fixed
+* Multiple minor bugs
+
 ## [1.0.8] - 2026-07-14
 
 ### Fixed

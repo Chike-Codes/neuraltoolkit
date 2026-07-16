@@ -12,12 +12,26 @@ from neuraltoolkit.training.history import History, Metrics
 
 class Trainer:
     """
-    Manages model training and evaluation.
+    `Trainer` is an orchestrator class used to streamline, train, and manage the training process.
 
     Args:
-        model: Model to train.
-        optimizer: Optimizer used for parameter updates.
-        loss: Loss function used during training.
+        model (Module):
+             Model to train.
+
+        optimizer: 
+            Optimizer used for parameter updates.
+
+        loss: 
+            Loss function used during training.
+
+    ## Example:
+    ```python
+    trainer = ntk.Trainer(
+        model=my_model,
+        optimizer=ntk.Adam(parameters=my_model.parameters()),
+        loss=ntk.MeanSquaredError()
+    )
+    ```
     """
     def __init__(self,
                   module:Module,
@@ -133,17 +147,39 @@ class Trainer:
     be provided through the y argument.
 
     Args:
-        data: Training data.
-        y: Training labels when using raw input tensors.
-        epochs: Number of training epochs.
-        batch_size: Number of samples per batch.
-        shuffle: Whether to shuffle the training data.
-        drop_remainder_batch: Whether to drop incomplete batches.
-        validation_split: Fraction of training data reserved for validation.
-        validation_data: Separate validation dataset or dataloader.
+        data: 
+            Training data.
+
+        y: 
+            Training labels when using raw input tensors.
+
+        epochs (int): 
+            Number of training epochs.
+
+        batch_size (int): 
+            Number of samples per batch.
+
+        shuffle (bool): 
+            Whether to shuffle the training data.
+        drop_remainder_batch (bool): 
+            Whether to drop incomplete batches.
+
+        validation_split (float): 
+            Fraction of training data reserved for validation.
+
+        validation_data: 
+            Separate validation dataset or dataloader.
+
+        verbose (bool):
+            Whether to track progess in the terminal. Defaults to `True`
 
     Returns:
-        A History object containing recorded training metrics.
+        After training has completed, a `History` object is returned that can be used to plot training metrics overtime.
+
+    Example:
+        history = trainer.fit(dataloader, epochs=100)
+
+        history.plot("loss", "val_loss)
     """
         config = self._prepare_training_input(
             data,
