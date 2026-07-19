@@ -1,4 +1,5 @@
 [![PyPI version](https://img.shields.io/pypi/v/ntk-ml?maxAge=0)](https://pypi.org/project/ntk-ml/)
+[![Docs](https://img.shields.io/badge/docs-online-blue)](https://chike-codes.github.io/neuraltoolkit/)
 
 ![NTK Banner](https://raw.githubusercontent.com/Chike-Codes/neuraltoolkit/refs/heads/main/NTK%20Banner.png)
 
@@ -183,3 +184,5 @@ print(f"Test Accuracy: {percentage}%")
 model.save(".model_conv.ntk")
 print("Model Saved!")
 ```
+
+[Documentation](https://chike-codes.github.io/neuraltoolkit/)
