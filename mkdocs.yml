@@ -1,0 +1,100 @@
+site_name: Neural Tool Kit
+site_description: A NumPy-based deep learning library designed for learning and experimentation.
+site_url: https://Chike-Codes.github.io/neuraltoolkit
+
+repo_name: Chike-Codes/neuraltoolkit
+repo_url: https://github.com/Chike-Codes/neuraltoolkit
+
+extra_css:
+  - stylesheets/extra.css
+
+theme:
+  name: material
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: cyan
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: amber
+
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.expand
+    - navigation.footer
+    - navigation.tabs.sticky
+    - content.code.copy
+    - search.highlight
+    - search.suggest
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: false
+            show_signature: false
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Examples:
+      - XOR: examples/xor.md
+      - MNIST: examples/mnist.md
+      - Serialization: examples/serialization.md
+  - API:
+      - Modules:
+          - Module: api/modules/module.md
+          - Layers:
+              - Dense: api/modules/layers/dense.md
+              - Conv2D: api/modules/layers/conv2d.md
+              - Flatten: api/modules/layers/flatten.md
+              - Max Pool 2D: api/modules/layers/max_pool2d.md
+              - Adaptive Max Pool 2D: api/modules/layers/adaptive_max_pool2d.md
+          - Containers:
+              - Sequential: api/modules/containers/sequential.md
+          - Activation Functions:
+              - Sigmoid: api/modules/activations/sigmoid.md
+              - Tanh: api/modules/activations/tanh.md
+              - ReLU: api/modules/activations/relu.md
+              - Leaky ReLU: api/modules/activations/leaky_relu.md
+              - Softmax: api/modules/activations/softmax.md
+      - Datasets: api/datasets.md
+      - Optimizers:
+          - Optimizer: api/optimizers/optimizer.md
+          - SGD: api/optimizers/sgd.md
+          - RMSProp: api/optimizers/rmsprop.md
+          - Adagrad: api/optimizers/adagrad.md
+          - Adam: api/optimizers/adam.md
+      - Losses: api/losses.md
+      - Tensor: api/tensor.md
+      - Parameter: api/parameter.md
+      - Trainer: api/trainer.md
+      - No Grad: api/no_grad.md

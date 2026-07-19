@@ -1,0 +1,1 @@
+::: neuraltoolkit.optimizers.sgd.Sgd
