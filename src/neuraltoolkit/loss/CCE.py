@@ -1,9 +1,9 @@
 import numpy as np
 from ..core.tensor import Tensor
 
-class CategoricalCrossEntropy:
+class CrossEntropy:
     """
-    Categorical cross entropy loss for multi-class classification.
+    Cross entropy loss for multi-class classification.
 
     Expects raw logits as input and one-hot encoded labels.
     """

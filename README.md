@@ -3,13 +3,12 @@
 ![NTK Banner](https://raw.githubusercontent.com/Chike-Codes/neuraltoolkit/refs/heads/main/NTK%20Banner.png)
 
 # Neural Tool Kit (NTK)
-Neural Tool Kit (NTK) is a machine learning framework built from
-scratch in Python on top of NumPy. The project aims to provide a
+Neural Tool Kit (NTK) is a NumPy-based machine learning framework built from scratch in Python. The project aims to provide a
 hands-on exploration of the core systems behind modern deep learning
 frameworks, including tensors, automatic differentiation, neural
 network layers, optimization, and training workflows.
 
-NTK was created as a learning-focused project to explore the
+I designed NTK as a learning-focused project to explore the
 fundamental systems behind modern deep learning frameworks.
 While it serves as a personal educational project, it may also
 be useful to students, hobbyists, and anyone interested in
@@ -45,7 +44,7 @@ The following features are planned but not yet available:
 
 ## Installation
 ```powershell
-python -m pip install ntk-ml
+pip install ntk-ml
 ```
 
 ## Import
@@ -57,26 +56,15 @@ import neuraltoolkit as ntk
 ```python
 import neuraltoolkit as ntk
 
+x = ntk.Tensor([[1, 2], [3, 4]])
 
-x = ntk.Tensor(training_data)
-y = ntk.Tensor(training_labels)
+print(x)
 
 model = ntk.Sequential(
-  ntk.Dense(in_shape=4, out_shape=32),
-  ntk.Relu(),
-  ntk.Dense(in_shape=32, out_shape=10),
-  ntk.Tanh()
+    ntk.Dense(2, 4),
+    ntk.Relu(),
+    ntk.Dense(4, 1)
 )
-
-trainer = ntk.Trainer(
-  module=model,
-  optimizer=ntk.Adam(parameters=model.parameters(), learning_rate=3e-4),
-  loss=ntk.MeanSquaredError()
-)
-
-trainer.fit(x, y, epochs=100)
-
-predictions = model(X)
 ```
 
 
@@ -172,7 +160,7 @@ train_dataset, val_dataset = ntk.datasets.mnist()
 trainer = ntk.Trainer(
     module=model,
     optimizer=ntk.Adam(parameters=model.parameters(), learning_rate=3e-4),
-    loss=ntk.CategoricalCrossEntropy()
+    loss=ntk.CrossEntropy()
 )
 
 history = trainer.fit(

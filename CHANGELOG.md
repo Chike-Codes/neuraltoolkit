@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on *Keep a Changelog*, and this project adheres to *Semantic Versioning*.
 
+## [1.0.12] - 2026-07-19
+
+### Updated
+* Changed `CategoricalCrossEntropy` to `CrossEntropy`
+* changed wording and quickstart in README
+
+## [1.0.11] - 2026-07-16
+
+### Fixed
+* bug fixes
+## [1.0.10] - 2026-07-16
+
+### Fixed
+* softmax() bug
+
 ## [1.0.9] - 2026-07-16
 
 ### Added

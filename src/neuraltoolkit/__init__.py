@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://gnu.org>.
 
-__version__ = "1.0.9"
+__version__ = "1.0.12"
 
 from .modules import *
 
@@ -25,4 +25,5 @@ from .optimizers import *
 from .initializers import *
 from .training import Trainer
 from . import datasets
-from .ops import softmax, check_dims, check_shape
+from .ops import softmax
+from .ops.checks import check_dims, check_shape
