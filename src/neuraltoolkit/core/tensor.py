@@ -35,7 +35,7 @@ class Tensor:
             self.data = self.data.astype(np.float32)
         self.dtype = self.data.dtype
         
-        self.requires_grad = requires_grad
+        self.requires_grad = requires_grad and Tensor.grad_enabled
 
         self.grad = np.zeros(shape=self.shape, dtype=np.float32) if requires_grad and Tensor.grad_enabled else None
 
@@ -146,7 +146,7 @@ class Tensor:
                 grad_self = out.grad.copy()
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
             
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = out.grad.copy()
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
         
@@ -164,7 +164,7 @@ class Tensor:
                 grad_self = out.grad.copy()
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
             
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = out.grad.copy()
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
 
@@ -182,7 +182,7 @@ class Tensor:
                 grad_self = out.grad.copy()
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
             
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = out.grad.copy()
                 other.grad -= self._reduce_broadcast(grad_other, other.shape)
 
@@ -200,7 +200,7 @@ class Tensor:
                 grad_self = out.grad.copy()
                 self.grad -= self._reduce_broadcast(grad_self, self.shape)
             
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = out.grad.copy()
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
 
@@ -218,7 +218,7 @@ class Tensor:
                 grad_self = out.grad * other.data
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = out.grad * self.data
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
 
@@ -236,7 +236,7 @@ class Tensor:
                 grad_self = out.grad * other.data
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = out.grad * self.data
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
 
@@ -254,7 +254,7 @@ class Tensor:
                 grad_self = out.grad / other.data
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = -out.grad * self.data / (other.data ** 2)
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
 
@@ -272,7 +272,7 @@ class Tensor:
                 grad_self = -out.grad * other.data / (self.data ** 2)
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = out.grad / self.data
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
 
@@ -290,7 +290,7 @@ class Tensor:
                 grad_self = other.data * (self.data ** (other.data - 1)) * out.grad
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = np.log(self.data) * (self.data ** other.data) * out.grad
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
 
@@ -308,7 +308,7 @@ class Tensor:
                 grad_self = np.log(other.data) * (other.data ** self.data) * out.grad
                 self.grad += self._reduce_broadcast(grad_self, self.shape)
 
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 grad_other = self.data * (other.data ** (self.data - 1)) * out.grad
                 other.grad += self._reduce_broadcast(grad_other, other.shape)
 
@@ -325,7 +325,7 @@ class Tensor:
             if self.requires_grad and Tensor.grad_enabled:
                 self.grad += out.grad @ other.data.T
 
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 other.grad += self.data.T @ out.grad
 
         out._backward_fn = _matmul_backward
@@ -341,7 +341,7 @@ class Tensor:
             if self.requires_grad and Tensor.grad_enabled:
                 self.grad += other.data.T @ out.grad
 
-            if other.requires_grad:
+            if other.requires_grad and Tensor.grad_enabled:
                 other.grad += out.grad @ self.data.T
 
         out._backward_fn = _matmul_backward
