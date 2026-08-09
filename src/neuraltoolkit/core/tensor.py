@@ -37,7 +37,7 @@ class Tensor:
         
         self.requires_grad = requires_grad
 
-        self.grad = np.zeros(shape=self.shape, dtype=np.float32) if requires_grad else None
+        self.grad = np.zeros(shape=self.shape, dtype=np.float32) if requires_grad and Tensor.grad_enabled else None
 
         self.name = "Tensor"
 
